@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Scanner de Red ISP</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #f4f6f9; margin: 0; padding: 20px; color: #333; }
+        .container { max-width: 900px; margin: auto; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        h1 { color: #007bff; text-align: center; }
+        textarea { width: 100%; height: 120px; padding: 10px; border: 1px solid #ccc; border-radius: 4px; font-family: monospace; font-size: 14px; }
+        button { background: #007bff; color: white; border: none; padding: 10px 20px; font-size: 16px; border-radius: 4px; cursor: pointer; margin-top: 10px; }
+        button:hover { background: #0056b3; }
+        .results { margin-top: 30px; }
+        .section { margin-bottom: 20px; background: #fafafa; padding: 15px; border-left: 5px solid #007bff; border-radius: 4px; }
+        .libre { color: #28a745; font-weight: bold; }
+        .ocupada { color: #dc3545; font-weight: bold; }
+        ul { padding-left: 20px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Auditor de IPs - ISP</h1>
+        <form method="POST">
+            <label for="ips_input">Pega las direcciones IP a escanear (una por línea o separadas por comas):</label><br><br>
+            <textarea name="ips_input" placeholder="45.228.139.255&#10;45.228.139.254&#10;10.255.10.10"></textarea><br>
+            <button type="submit">Iniciar Escaneo</button>
+        </form>
+
+        {% if escaneado %}
+        <div class="results">
+            <h2>Resultados del Análisis</h2>
+            
+            <div class="section">
+                <h3>IPs Públicas</h3>
+                <p class="libre">Libres ({{ publicas_libres|length }}):</p>
+                <ul>
+                    {% for item in publicas_libres %}<li>{{ item.ip }} - <small>{{ item.detalle }}</small></li>{% endfor %}
+                </ul>
+                <p class="ocupada">Ocupadas ({{ publicas_ocupadas|length }}):</p>
+                <ul>
+                    {% for item in publicas_ocupadas %}<li>{{ item.ip }} - <small>{{ item.detalle }}</small></li>{% endfor %}
+                </ul>
+            </div>
+
+            <div class="section">
+                <h3>IPs Privadas</h3>
+                <p class="libre">Libres ({{ privadas_libres|length }}):</p>
+                <ul>
+                    {% for item in privadas_libres %}<li>{{ item.ip }} - <small>{{ item.detalle }}</small></li>{% endfor %}
+                </ul>
+                <p class="ocupada">Ocupadas ({{ privadas_ocupadas|length }}):</p>
+                <ul>
+                    {% for item in privadas_ocupadas %}<li>{{ item.ip }} - <small>{{ item.detalle }}</small></li>{% endfor %}
+                </ul>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>
